@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.left}>
         <Image src="/zlogo.png" alt="logo" width={540} height={540} />
       </div>
@@ -15,6 +15,6 @@ export default function Home() {
         <h3>이미 트위터에 가입하셨나요?</h3>
         <Link href="/login" className={styles.login}>로그인</Link>
       </div>
-    </div>
+    </>
   )
 }
