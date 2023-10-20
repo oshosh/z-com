@@ -1,4 +1,4 @@
-import styles from '@/app/page.module.css'
+import styles from '@/app/(beforeLogin)/_component/beforeLogin.module.css'
 
 type Props = {
   children: React.ReactNode,
