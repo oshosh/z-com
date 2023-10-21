@@ -1,8 +1,10 @@
+import Tab from "./_component/Tab";
+import style from "./home.module.css";
 
 export default function Home() {
-  return(
-    <main>
-      홈페이지
+  return (
+    <main className={style.main}>
+      <Tab />
     </main>
-  )
+  );
 }
