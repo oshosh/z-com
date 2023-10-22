@@ -8,8 +8,8 @@ export default function PostForm() {
   const [content, setContent] = useState("");
 
   const me = {
-    image: "/",
-    id: "z",
+    image: "/5Udwvqim.jpg",
+    id: "zerohch0",
   };
   const onClickButton = () => {
     imageRef.current?.click();

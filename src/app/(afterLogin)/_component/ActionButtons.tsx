@@ -1,42 +1,16 @@
 "use client";
 import style from "@/app/(afterLogin)/_component/post.module.css";
-import { Post } from "@/model/Post";
 import cx from "classnames";
 import { MouseEventHandler, useRef, useState } from "react";
 
-type Props = {
-  post: Post;
-  white?: boolean;
-};
-export default function ActionButtons({ post, white }: Props) {
-  const repostId = useRef<number | null>(post.postId ?? null);
-  const [liked, setLiked] = useState(post.Repost?.liked || post.liked || false);
-  const [likeCount, setLikeCount] = useState(
-    post.Repost?.likeCount || post.likeCount || 0
-  );
-  const [commented, setCommented] = useState(
-    post.Repost?.commented || post.commented || false
-  );
-  const [commentCount, setCommentCount] = useState(
-    post.Repost?.commentCount || post.commentCount || 0
-  );
-  const [reposted, setReposted] = useState(
-    post.Repost?.reposted || post.reposted || false
-  );
-  const [repostCount, setRepostCount] = useState(
-    post.Repost?.repostCount || post.repostCount || 0
-  );
+export default function ActionButtons() {
+  const commented = false;
+  const reposted = true;
+  const liked = true;
 
   const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (commented) {
-      setCommented(false);
-      setCommentCount((prev) => prev - 1);
-    } else {
-      setCommented(true);
-      setCommentCount((prev) => prev + 1);
-    }
   };
 
   const onClickRepost: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -54,8 +28,7 @@ export default function ActionButtons({ post, white }: Props) {
       <div
         className={cx(
           style.commentButton,
-          commented && style.commented,
-          white && style.white
+          { [style.commented]: commented } 
         )}
       >
         <button onClick={onClickComment}>
@@ -65,13 +38,12 @@ export default function ActionButtons({ post, white }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{commentCount || ""}</div>
+        <div className={style.count}>{0 || ""}</div>
       </div>
       <div
         className={cx(
           style.repostButton,
           reposted && style.reposted,
-          white && style.white
         )}
       >
         <button onClick={onClickRepost}>
@@ -81,13 +53,12 @@ export default function ActionButtons({ post, white }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{repostCount || ""}</div>
+        <div className={style.count}>{1 || ""}</div>
       </div>
       <div
         className={cx([
           style.heartButton,
           liked && style.liked,
-          white && style.white,
         ])}
       >
         <button onClick={onClickHeart}>
@@ -97,7 +68,7 @@ export default function ActionButtons({ post, white }: Props) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{likeCount || ""}</div>
+        <div className={style.count}>{1 || ""}</div>
       </div>
     </div>
   );
