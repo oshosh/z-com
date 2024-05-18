@@ -1,11 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import style from "./logOutButton.module.css";
+import style from "./logoutButton.module.css";
 
-export default function LogOutButton() {
-  const router = useRouter();
+export default function LogoutButton() {
   const me = {
+    // 임시로 내 정보 있는것처럼
     id: "zerohch0",
     nickname: "제로초",
     image: "/5Udwvqim.jpg",

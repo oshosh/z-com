@@ -1,9 +1,12 @@
 "use client";
 import style from "@/app/(afterLogin)/_component/post.module.css";
 import cx from "classnames";
-import { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler } from "react";
 
-export default function ActionButtons() {
+type ActionButtonsProps = {
+  white?: boolean;
+};
+export default function ActionButtons({ white }: ActionButtonsProps) {
   const commented = false;
   const reposted = true;
   const liked = true;
@@ -13,7 +16,7 @@ export default function ActionButtons() {
     e.preventDefault();
   };
 
-  const onClickRepost: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onClickRePost: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
   };
@@ -28,7 +31,8 @@ export default function ActionButtons() {
       <div
         className={cx(
           style.commentButton,
-          { [style.commented]: commented } 
+          { [style.commented]: commented },
+          white && style.white
         )}
       >
         <button onClick={onClickComment}>
@@ -44,9 +48,10 @@ export default function ActionButtons() {
         className={cx(
           style.repostButton,
           reposted && style.reposted,
+          white && style.white
         )}
       >
-        <button onClick={onClickRepost}>
+        <button onClick={onClickRePost}>
           <svg width={24} viewBox="0 0 24 24" aria-hidden="true">
             <g>
               <path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"></path>
@@ -59,6 +64,7 @@ export default function ActionButtons() {
         className={cx([
           style.heartButton,
           liked && style.liked,
+          white && style.white,
         ])}
       >
         <button onClick={onClickHeart}>

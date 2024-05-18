@@ -1,16 +1,15 @@
 "use client";
 
-import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { useContext } from "react";
 import style from "./navMenu.module.css";
 
 export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
-  const { tree } = useContext(LayoutRouterContext);
+  console.log(segment);
   const me = {
-    id: "zeroch0",
+    // 임시로 내 정보 있는것처럼
+    id: "zerohch0",
   };
 
   return (
