@@ -9,7 +9,7 @@
   align-items: flex-end;
   flex-direction: column;
   flex-grow: 1;
-  /* flex-shrink: 0; */
+  flex-shrink: 0;
 }
 
 .leftSection {
@@ -18,7 +18,7 @@
 }
 
 .leftSectionFixed {
-  background-color: orange;
+  /* background-color: orange; */
   position: fixed;
   width: inherit;
   height: 100dvh;
@@ -82,7 +82,7 @@
 }
 
 .rightSectionInner {
-  background-color: aqua;
+  /* background-color: aqua; */
   height: 100%;
   width: 990px;
   display: flex;
@@ -90,7 +90,7 @@
 }
 
 .main {
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
   width: 600px;
   margin-right: 40px;
 
@@ -98,7 +98,7 @@
 }
 
 .rightSection {
-  background-color: blue;
+  /* background-color: blue; */
   width: 350px;
   height: 100%;
 }

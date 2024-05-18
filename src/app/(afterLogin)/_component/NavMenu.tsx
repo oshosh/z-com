@@ -1,11 +1,14 @@
 "use client";
 
+import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
+import { useContext } from "react";
 import style from "./navMenu.module.css";
 
 export default function NavMenu() {
   const segment = useSelectedLayoutSegment();
+  const { tree } = useContext(LayoutRouterContext);
   const me = {
     id: "zeroch0",
   };
