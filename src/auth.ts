@@ -1,24 +1,24 @@
-import { CredentialsSignin } from "@auth/core/errors";
-import NextAuth, { DefaultSession } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import {NextResponse} from "next/server";
-import { JWT } from "next-auth/jwt"
+import { CredentialsSignin } from '@auth/core/errors';
+import NextAuth, { DefaultSession } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextResponse } from 'next/server';
+import { JWT } from 'next-auth/jwt';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       uid?: string | undefined | null;
       test?: string | undefined | null;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
-  interface User {    
+  interface User {
     uid?: string | undefined | null;
     test?: string | undefined | null;
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   interface JWT {
     uid?: string | undefined | null;
     test?: string | undefined | null;
@@ -26,9 +26,9 @@ declare module "next-auth/jwt" {
 }
 
 export const {
-  handlers: {GET, POST},
+  handlers: { GET, POST },
   auth,
-  signIn 
+  signIn,
 } = NextAuth({
   pages: {
     signIn: '/i/flow/login',
@@ -47,20 +47,20 @@ export const {
       // console.log('auth.ts jwt', token);
       // console.log('auth.ts jwt', user);
       if (user) {
-        token.uid = user.uid; 
-        token.test = user.test; 
+        token.uid = user.uid;
+        token.test = user.test;
       }
       return token;
     },
-    async session({ session, token, newSession, user}) {
+    async session({ session, token, newSession, user }) {
       // console.log('auth.ts session', session, newSession, user);
 
       if (token) {
         session.user.uid = token.uid;
-        session.user.test = token.test;  // 토큰에서 세션으로 test 값을 전달
+        session.user.test = token.test; // 토큰에서 세션으로 test 값을 전달
       }
       return session;
-    }
+    },
   },
   events: {
     signOut(data) {
@@ -74,23 +74,23 @@ export const {
     },
     session(data) {
       // console.log('auth.ts events session', 'session' in data && data.session, 'token' in data && data.token);
-    }
+    },
   },
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
         const authResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             id: credentials.username,
             password: credentials.password,
           }),
-        })
+        });
         // 여기 주목!!! 서버에서 에러가 발생할 때 그 에러 내용이 서버에 담겨 있을 겁니다.
-         console.log(authResponse.status, authResponse.statusText)
+        console.log(authResponse.status, authResponse.statusText);
 
         if (!authResponse.ok) {
           const credentialsSignin = new CredentialsSignin();
@@ -101,17 +101,17 @@ export const {
           }
           throw credentialsSignin;
         }
-  
-        const user = await authResponse.json()
+
+        const user = await authResponse.json();
         console.log('user', user);
-        
+
         return {
           uid: user.id,
           name: user.nickname,
           image: user.image,
           test: '123',
-        }
+        };
       },
     }),
-  ]
+  ],
 });

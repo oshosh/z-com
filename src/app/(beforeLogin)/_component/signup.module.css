@@ -87,7 +87,7 @@
   opacity: 0.5;
 }
 .actionButton:hover {
-  background-color: rgb(39,44,48);
+  background-color: rgb(39, 44, 48);
 }
 
 .closeButton {
@@ -105,7 +105,7 @@
   justify-content: center;
 }
 .closeButton:hover {
-  background-color: rgba(15,20,25, 0.1);
+  background-color: rgba(15, 20, 25, 0.1);
 }
 
 .error {

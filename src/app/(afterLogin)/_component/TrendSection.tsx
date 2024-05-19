@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import Trend from "@/app/(afterLogin)/_component/Trend";
-import { usePathname } from "next/navigation";
-import style from "./trendSection.module.css";
-import { useSession } from "next-auth/react";
+import Trend from '@/app/(afterLogin)/_component/Trend';
+import { usePathname } from 'next/navigation';
+import style from './trendSection.module.css';
+import { useSession } from 'next-auth/react';
 
 export default function TrendSection() {
   const pathname = usePathname();
   const { data } = useSession();
-  if (pathname === "/explore") return null;
-  if(!data?.user){
+  if (pathname === '/explore') return null;
+  if (!data?.user) {
     return (
       <div className={style.trendBg}>
         <div className={style.noTrend}>
@@ -36,5 +36,4 @@ export default function TrendSection() {
       </div>
     );
   }
-  
 }

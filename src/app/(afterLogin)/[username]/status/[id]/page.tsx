@@ -1,7 +1,7 @@
-import CommentForm from "@/app/(afterLogin)/[username]/status/[id]/_component/CommentForm";
-import BackButton from "@/app/(afterLogin)/_component/BackButton";
-import Post from "@/app/(afterLogin)/_component/Post";
-import style from "./singlePost.module.css";
+import CommentForm from '@/app/(afterLogin)/[username]/status/[id]/_component/CommentForm';
+import BackButton from '@/app/(afterLogin)/_component/BackButton';
+import Post from '@/app/(afterLogin)/_component/Post';
+import style from './singlePost.module.css';
 
 export default function SinglePost() {
   return (

@@ -27,12 +27,11 @@
 
 @media all and (min-width: 1300px) {
   .leftSection {
-      width: 275px;
+    width: 275px;
   }
   .leftSectionFixed {
-      align-items: flex-start;
+    align-items: flex-start;
   }
-
 }
 
 .leftSectionFixed nav {
@@ -57,7 +56,7 @@
   align-items: center;
 }
 .logoPill:hover {
-  background-color: rgba(15,20,25, 0.1);
+  background-color: rgba(15, 20, 25, 0.1);
 }
 
 .postButton {
@@ -89,15 +88,15 @@
 
 @media all and (min-width: 1300px) {
   .postButton {
-      height: 52px;
-      width: 234px;
-      border-radius: 26px;
+    height: 52px;
+    width: 234px;
+    border-radius: 26px;
   }
   .postButton span {
-      display: inline-block;
+    display: inline-block;
   }
   .postButton svg {
-      display: none;
+    display: none;
   }
 }
 
@@ -119,12 +118,12 @@
 }
 @media all and (min-width: 1024px) {
   .rightSection {
-      display: inline-block;
-      width: 350px;
-      height: 100%;
+    display: inline-block;
+    width: 350px;
+    height: 100%;
   }
   .rightSectionInner {
-      width: 990px;
+    width: 990px;
   }
 }
 

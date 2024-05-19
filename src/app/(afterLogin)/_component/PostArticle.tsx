@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { ReactNode } from "react";
-import style from "./post.module.css";
+import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
+import style from './post.module.css';
 
 type Props = {
   children: ReactNode;

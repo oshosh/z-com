@@ -1,14 +1,14 @@
-import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
-import PostArticle from "@/app/(afterLogin)/_component/PostArticle";
-import PostImages from "@/app/(afterLogin)/_component/PostImages";
-import { faker } from "@faker-js/faker";
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
-import relativeTime from "dayjs/plugin/relativeTime";
-import Link from "next/link";
-import style from "./post.module.css";
+import ActionButtons from '@/app/(afterLogin)/_component/ActionButtons';
+import PostArticle from '@/app/(afterLogin)/_component/PostArticle';
+import PostImages from '@/app/(afterLogin)/_component/PostImages';
+import { faker } from '@faker-js/faker';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Link from 'next/link';
+import style from './post.module.css';
 
-dayjs.locale("ko");
+dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
 type Props = {
@@ -18,11 +18,11 @@ export default function Post({ noImage }: Props) {
   const target = {
     postId: 1,
     User: {
-      id: "elonmusk",
-      nickname: "Elon Musk",
-      image: "/yRsRRjGO.jpg",
+      id: 'elonmusk',
+      nickname: 'Elon Musk',
+      image: '/yRsRRjGO.jpg',
     },
-    content: "클론코딩 라이브로 하니 너무 힘들어요 ㅠㅠ",
+    content: '클론코딩 라이브로 하니 너무 힘들어요 ㅠㅠ',
     createdAt: new Date(),
     Images: [] as any[],
   };
@@ -52,9 +52,7 @@ export default function Post({ noImage }: Props) {
               <span className={style.postUserId}>@{target.User.id}</span>
               &nbsp; · &nbsp;
             </Link>
-            <span className={style.postDate}>
-              {dayjs(target.createdAt).fromNow(true)}
-            </span>
+            <span className={style.postDate}>{dayjs(target.createdAt).fromNow(true)}</span>
           </div>
           <div>{target.content}</div>
           <div>

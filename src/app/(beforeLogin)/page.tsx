@@ -4,12 +4,10 @@ import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const session = await auth();
-  if(session?.user){
+  if (session?.user) {
     redirect('/home');
     return null;
   }
 
-  return (
-     <BeforeLogin />
-  )
+  return <BeforeLogin />;
 }

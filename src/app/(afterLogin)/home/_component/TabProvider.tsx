@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { ReactNode, createContext, useMemo, useState } from "react";
+import { ReactNode, createContext, useMemo, useState } from 'react';
 
 interface ITabContext {
-  tab: "rec" | "fol";
-  setTab: (value: "rec" | "fol") => void;
+  tab: 'rec' | 'fol';
+  setTab: (value: 'rec' | 'fol') => void;
 }
 
 export const TabContext = createContext<ITabContext>({
-  tab: "rec",
+  tab: 'rec',
   setTab: () => {},
 });
 
 type Props = { children: ReactNode };
 
 export default function TabProvider({ children }: Props) {
-  const [tab, setTab] = useState<"rec" | "fol">("rec");
+  const [tab, setTab] = useState<'rec' | 'fol'>('rec');
 
   const value = useMemo(() => ({ tab, setTab }), [tab]);
 

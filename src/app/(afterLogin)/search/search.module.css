@@ -44,7 +44,7 @@
 }
 
 .formZone {
-  fleX: 1;
+  flex: 1;
   height: 53px;
   width: 526px;
 }
@@ -75,7 +75,7 @@
   position: relative;
 }
 .homeTab a:hover {
-  background-color: rgba(15,20,25, 0.1);
+  background-color: rgba(15, 20, 25, 0.1);
 }
 
 .tabIndicator {

@@ -23,17 +23,17 @@
 }
 @media all and (min-width: 1300px) {
   .logOutButton {
-      width: 258px;
+    width: 258px;
   }
   .logOutUserName {
-      margin: 0 12px;
-      display: inline-block;
+    margin: 0 12px;
+    display: inline-block;
   }
   .logOutUserName > div:first-child {
-      font-weight: bold;
+    font-weight: bold;
   }
 }
 .logOutButton:hover {
-  background-color: rgba(15,20,25, 0.1);
+  background-color: rgba(15, 20, 25, 0.1);
   border-radius: 33px;
 }

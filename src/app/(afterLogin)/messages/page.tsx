@@ -1,5 +1,5 @@
-import Room from "@/app/(afterLogin)/messages/_component/Room";
-import style from "./message.module.css";
+import Room from '@/app/(afterLogin)/messages/_component/Room';
+import style from './message.module.css';
 
 export default function Home() {
   return (

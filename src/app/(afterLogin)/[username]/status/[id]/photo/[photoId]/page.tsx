@@ -1,4 +1,4 @@
-import Home from "@/app/(afterLogin)/home/page";
+import Home from '@/app/(afterLogin)/home/page';
 
 type Props = {
   params: { username: string; id: string; photoId: string };

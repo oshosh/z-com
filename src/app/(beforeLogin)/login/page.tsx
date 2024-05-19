@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useRouter } from "next/navigation";
-import BeforeLogin from "@/app/(beforeLogin)/_component/BeforeLogin";
-import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import BeforeLogin from '@/app/(beforeLogin)/_component/BeforeLogin';
+import { useSession } from 'next-auth/react';
 
 export default function Logion() {
   const router = useRouter();
   router.replace('/i/flow/login');
   const session = useSession();
-  
-  if(session.status === 'authenticated'){
+
+  if (session.status === 'authenticated') {
     router.replace('/home');
     return null;
   }

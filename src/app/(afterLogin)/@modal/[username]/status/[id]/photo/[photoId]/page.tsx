@@ -1,9 +1,9 @@
-import PhotoModalCloseButton from "@/app/(afterLogin)/@modal/[username]/status/[id]/photo/[photoId]/_component/PhotoModalCloseButton";
-import CommentForm from "@/app/(afterLogin)/[username]/status/[id]/_component/CommentForm";
-import ActionButtons from "@/app/(afterLogin)/_component/ActionButtons";
-import Post from "@/app/(afterLogin)/_component/Post";
-import { faker } from "@faker-js/faker";
-import style from "./photoModal.module.css";
+import PhotoModalCloseButton from '@/app/(afterLogin)/@modal/[username]/status/[id]/photo/[photoId]/_component/PhotoModalCloseButton';
+import CommentForm from '@/app/(afterLogin)/[username]/status/[id]/_component/CommentForm';
+import ActionButtons from '@/app/(afterLogin)/_component/ActionButtons';
+import Post from '@/app/(afterLogin)/_component/Post';
+import { faker } from '@faker-js/faker';
+import style from './photoModal.module.css';
 
 export default function Default() {
   const photo = {
@@ -18,10 +18,7 @@ export default function Default() {
       <PhotoModalCloseButton />
       <div className={style.imageZone}>
         <img src={photo.link} alt={photo.Post?.content} />
-        <div
-          className={style.image}
-          style={{ backgroundImage: `url(${photo.link})` }}
-        />
+        <div className={style.image} style={{ backgroundImage: `url(${photo.link})` }} />
         <div className={style.buttonZone}>
           <div className={style.buttonInner}>
             <ActionButtons white />
