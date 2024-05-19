@@ -8,20 +8,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import ZLogo from "../../../public/zlogo.png";
+import { auth } from "@/auth";
 
 type Props = { children: ReactNode; modal: ReactNode };
-export default function AfterLoginLayout({ children, modal }: Props) {
+export default async function AfterLoginLayout({ children, modal }: Props) {
+  const session = await auth();
+  
   return (
     <div className={style.container}>
       <header className={style.leftSectionWrapper}>
         <section className={style.leftSection}>
           <div className={style.leftSectionFixed}>
-            <Link className={style.logo} href="/home">
+            <Link className={style.logo} href={session?.user ? "/home" : "/"}>
               <div className={style.logoPill}>
                 <Image src={ZLogo} alt="z.com로고" width={40} height={40} />
               </div>
             </Link>
-            <nav>
+            {session?.user && <>
+              <nav>
               <ul>
                 <NavMenu />
               </ul>
@@ -39,6 +43,7 @@ export default function AfterLoginLayout({ children, modal }: Props) {
               </Link>
             </nav>
             <LogOutButton />
+            </>}
           </div>
         </section>
       </header>
