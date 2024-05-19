@@ -38,6 +38,7 @@ export default async (prevState: any, formData: FormData) => {
     console.log(await response.json());
     shouldRedirect = true;
     
+    // server쪽으로 로그인
     await signIn("credentials", {
       username: formData.get("id"),
       password: formData.get("password"),
