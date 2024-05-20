@@ -3,20 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import style from './post.module.css';
+import { Post as IPost } from '@/model/Post';
 
 type Props = {
   children: ReactNode;
-  post: {
-    postId: number;
-    content: string;
-    User: {
-      id: string;
-      nickname: string;
-      image: string;
-    };
-    createdAt: Date;
-    Images: any[];
-  };
+  post: IPost;
 };
 
 export default function PostArticle({ children, post }: Props) {
