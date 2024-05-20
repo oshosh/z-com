@@ -21,6 +21,7 @@ export default async function Home() {
 
   return (
     <main className={style.main}>
+      {/* network tab에서 home에 ssg에서 미리 가져와서 불러다 client로 뿌릴수 있음 */}
       <HydrationBoundary state={dehydrateState}>
         <TabProvider>
           <Tab />
