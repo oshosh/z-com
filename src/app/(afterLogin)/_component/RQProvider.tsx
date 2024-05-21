@@ -12,7 +12,10 @@ export default function RQProvider({ children }: Props) {
     new QueryClient({
       defaultOptions: {
         queries: {
-          refetchOnWindowFocus: false,
+          // stale된 데이터를 다시 가져오는 경우 3가지
+          refetchOnWindowFocus: false, // 다른 탭 있다가 다시 브라우저로 focus될때
+          retryOnMount: true, // 컴포넌트가 언마운트되었다가 다시 마운트되었을때
+          refetchOnReconnect: false, // 인터넷 연결이 끊겼다가 다시 연결되었을때
           retry: false,
         },
       },
