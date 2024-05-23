@@ -3,16 +3,12 @@
 import { signOut, useSession } from 'next-auth/react';
 import style from './logoutButton.module.css';
 import { useRouter } from 'next/navigation';
+import { Session } from 'next-auth';
 
-export default function LogoutButton() {
-  const { data: me } = useSession(); // client만 가능함 vs server는 auth()로 가져옴
-
-  // const me = {
-  //   // 임시로 내 정보 있는것처럼
-  //   id: "zerohch0",
-  //   nickname: "제로초",
-  //   image: "/5Udwvqim.jpg",
-  // };
+type Props = {
+  me: Session | null;
+};
+export default function LogoutButton({ me }: Props) {
   const router = useRouter();
 
   const onLogout = () => {

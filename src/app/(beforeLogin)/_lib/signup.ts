@@ -23,7 +23,7 @@ export default async (prevState: any, formData: FormData) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`, {
       method: 'post',
       body: formData,
-      credentials: 'include',
+      credentials: 'include', // next-auth의 쿠기를 다시 담게 하려면..
     });
     console.log(response.status);
     if (response.status === 403) {

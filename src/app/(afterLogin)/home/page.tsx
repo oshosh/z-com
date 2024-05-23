@@ -5,12 +5,15 @@ import TabProvider from './_component/TabProvider';
 import style from './home.module.css';
 import { getPostRecommends } from './_lib/getPostRecommends';
 import TabDecider from './_component/TabDecider';
+import { auth } from '@/auth';
 
 export default async function Home() {
+  const session = await auth();
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['posts', 'recommends'],
     queryFn: getPostRecommends,
+    initialPageParam: 0,
   });
   // dehydrateState를 통해 prefetchQuery를 client로 hydrate하는 과정
   const dehydrateState = dehydrate(queryClient);
@@ -24,7 +27,7 @@ export default async function Home() {
       <HydrationBoundary state={dehydrateState}>
         <TabProvider>
           <Tab />
-          <PostForm />
+          <PostForm me={session} />
           <TabDecider />
         </TabProvider>
       </HydrationBoundary>

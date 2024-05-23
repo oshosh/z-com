@@ -45,7 +45,7 @@ export default async function AfterLoginLayout({ children, modal }: Props) {
                     </svg>
                   </Link>
                 </nav>
-                <LogOutButton />
+                <LogOutButton me={session} />
               </>
             )}
           </div>
