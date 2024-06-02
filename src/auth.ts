@@ -36,7 +36,7 @@ export const {
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log('auth.ts jwt', token);
+      // console.log('auth.ts jwt', token);
       if (user) {
         token.uid = user.uid;
         token.content = user.content;
@@ -44,10 +44,10 @@ export const {
       return token;
     },
     async session({ session, token, newSession, user }) {
-      console.log('session callback', session);
-      console.log('token callback', token);
+      // console.log('session callback', session);
+      // console.log('token callback', token);
       // console.log('newSession callback', newSession);
-      console.log('user callback', user);
+      // console.log('user callback', user);
 
       if (token.content) {
         session.user.uid = token.uid;

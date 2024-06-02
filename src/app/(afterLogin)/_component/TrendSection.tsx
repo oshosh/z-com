@@ -1,5 +1,4 @@
 'use client';
-
 import style from './trendSection.module.css';
 import Trend from '@/app/(afterLogin)/_component/Trend';
 import { usePathname } from 'next/navigation';
@@ -13,7 +12,7 @@ export default function TrendSection() {
   const { data } = useQuery<Hashtag[]>({
     queryKey: ['trends'],
     queryFn: getTrends,
-    staleTime: 60 * 1000,
+    staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
     gcTime: 300 * 1000,
     enabled: !!session?.user,
   });
@@ -25,7 +24,7 @@ export default function TrendSection() {
       <div className={style.trendBg}>
         <div className={style.trend}>
           <h3>나를 위한 트렌드</h3>
-          {data?.map((trendItem) => <Trend trend={trendItem} key={trendItem.tagId} />)}
+          {data?.map((trend) => <Trend trend={trend} key={trend.tagId} />)}
         </div>
       </div>
     );

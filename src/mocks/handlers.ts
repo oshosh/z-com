@@ -231,6 +231,7 @@ export const handlers = [
   }),
   http.get('/api/posts/:postId', ({ request, params }): StrictResponse<any> => {
     const { postId } = params;
+    // post 페이지는 10개 까지만
     if (parseInt(postId as string) > 10) {
       return HttpResponse.json(
         { message: 'no_such_post' },
@@ -242,7 +243,7 @@ export const handlers = [
     return HttpResponse.json({
       postId,
       User: User[0],
-      content: `${1} 게시글 아이디 ${postId}의 내용`,
+      content: `${1} 게시글 아이뒤 ${postId}의 내용 12312312`,
       Images: [
         { imageId: 1, link: faker.image.urlLoremFlickr() },
         { imageId: 2, link: faker.image.urlLoremFlickr() },
@@ -257,7 +258,7 @@ export const handlers = [
       {
         postId: 1,
         User: User[0],
-        content: `${1} 게시글 ${postId}의 답글`,
+        content: `${1} 게시글 ${postId}의 답글111111111123123123123`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
@@ -294,7 +295,7 @@ export const handlers = [
   http.get('/api/followRecommends', ({ request }) => {
     return HttpResponse.json(User);
   }),
-  http.get('/api/trends', ({ request }) => {
+  http.get('/api/hashtags/trends', ({ request }) => {
     return HttpResponse.json([
       { tagId: 1, title: '제로초', count: 1264 },
       { tagId: 2, title: '원초', count: 1264 },

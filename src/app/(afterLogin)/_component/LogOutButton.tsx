@@ -20,7 +20,7 @@ export default function LogoutButton({ me }: Props) {
   if (!me?.user) {
     return null;
   }
-  console.log('me', me);
+  // console.log('me', me);
 
   return (
     <button className={style.logOutButton} onClick={onLogout}>
