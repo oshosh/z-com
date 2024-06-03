@@ -1,7 +1,6 @@
 import ActionButtons from '@/app/(afterLogin)/_component/ActionButtons';
 import PostArticle from '@/app/(afterLogin)/_component/PostArticle';
 import PostImages from '@/app/(afterLogin)/_component/PostImages';
-import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';

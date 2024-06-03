@@ -10,10 +10,10 @@ import { auth } from '@/auth';
 export default async function Home() {
   const session = await auth();
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ['posts', 'recommends'],
     queryFn: getPostRecommends,
-    initialPageParam: 0,
+    initialPageParam: 0, // 처음 cursor 값
   });
   // dehydrateState를 통해 prefetchQuery를 client로 hydrate하는 과정
   const dehydrateState = dehydrate(queryClient);
