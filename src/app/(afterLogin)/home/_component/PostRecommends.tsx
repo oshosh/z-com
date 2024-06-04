@@ -13,20 +13,21 @@ import styles from '@/app/(afterLogin)/home/home.module.css';
 // 즉 isPending && isFetching 은 isLoading이 true인 경우이다.
 export default function PostRecommends() {
   // hasNextPage 다음 페이지가 있는지 여부
-  const { data, fetchNextPage, hasNextPage, isFetching, isPending, isLoading } = useInfiniteQuery<
-    IPost[],
-    Object,
-    InfiniteData<IPost[]>,
-    [_1: string, _2: string],
-    number // initialPageParam
-  >({
-    queryKey: ['posts', 'recommends'],
-    queryFn: getPostRecommends,
-    staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
-    gcTime: 300 * 1000,
-    initialPageParam: 0, // [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]] => 2차원 배열 형태로 가지고 있음
-    getNextPageParam: (lastPage) => lastPage.at(-1)?.postId,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetching, isPending, isLoading, isError } =
+    useInfiniteQuery<
+      IPost[],
+      Object,
+      InfiniteData<IPost[]>,
+      [_1: string, _2: string],
+      number // initialPageParam
+    >({
+      queryKey: ['posts', 'recommends'],
+      queryFn: getPostRecommends,
+      staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
+      gcTime: 300 * 1000,
+      initialPageParam: 0, // [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]] => 2차원 배열 형태로 가지고 있음
+      getNextPageParam: (lastPage) => lastPage.at(-1)?.postId,
+    });
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -61,6 +62,13 @@ export default function PostRecommends() {
             style={{ stroke: 'rgb(129, 155, 240)', strokeDasharray: 80, strokeDashoffset: 60 }}
           ></circle>
         </svg>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div>
+        <h2>Something went wrong!</h2>
       </div>
     );
   }

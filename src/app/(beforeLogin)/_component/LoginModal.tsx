@@ -23,23 +23,22 @@ export default function LoginModal() {
       }); // next-auth/react -> 클라이언트 사이드 일 경우 vs 서버인 경우는 @/auth의 signIn() 사용
 
       //https://next-auth.js.org/getting-started/client
-      router.replace('/home');
-      // const {
-      //   user: { content },
-      // } = (await getSession()) as any;
+      const {
+        user: { content },
+      } = (await getSession()) as any;
 
-      // if (content.success === 404 || content.success === 401) {
-      //   // 보안으로 따로 검증 안함
-      //   if (content.data === 'no_user') {
-      //     //
-      //   }
-      //   if (content.data === 'wrong_password') {
-      //     //
-      //   }
-      //   setMessage('아이디와 비밀번호가 일치하지 않습니다.');
-      // } else {
-      //   router.replace('/home');
-      // }
+      if (content.success === 404 || content.success === 401) {
+        // 보안으로 따로 검증 안함
+        if (content.data === 'no_user') {
+          //
+        }
+        if (content.data === 'wrong_password') {
+          //
+        }
+        setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+      } else {
+        router.replace('/home');
+      }
     } catch (err) {
       console.error(err);
       setMessage('아이디와 비밀번호가 일치하지 않습니다.');
