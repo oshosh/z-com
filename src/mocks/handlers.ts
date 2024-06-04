@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { http, HttpResponse, StrictResponse } from 'msw';
+import { delay, http, HttpResponse, StrictResponse } from 'msw';
 
 function generateDate() {
   const lastWeek = new Date(Date.now());
@@ -9,6 +9,7 @@ function generateDate() {
     to: Date.now(),
   });
 }
+
 const User = [
   { id: 'elonmusk', nickname: 'Elon Musk', image: '/yRsRRjGO.jpg' },
   { id: 'zerohch0', nickname: '제로초', image: '/5Udwvqim.jpg' },
@@ -44,9 +45,11 @@ export const handlers = [
       },
     });
   }),
-  http.get('/api/postRecommends', ({ request }) => {
+  http.get('/api/posts/recommends', async ({ request }) => {
+    await delay(1000);
     const url = new URL(request.url);
     const cursor = parseInt(url.searchParams.get('cursor') as string) || 0;
+
     return HttpResponse.json([
       {
         postId: cursor + 1,
@@ -97,40 +100,44 @@ export const handlers = [
       },
     ]);
   }),
-  http.get('/api/followingPosts', ({ request }) => {
+  http.get('/api/posts/followings', async ({ request }) => {
+    await delay(1000);
+    const url = new URL(request.url);
+    const cursor = parseInt(url.searchParams.get('cursor') as string) || 0;
+
     return HttpResponse.json([
       {
-        postId: 1,
+        postId: cursor + 1,
         User: User[0],
-        content: `${1} Stop following me. I'm too famous.`,
+        content: `${cursor + 1}  Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: 2,
+        postId: cursor + 2,
         User: User[0],
-        content: `${2} Stop following me. I'm too famous.`,
+        content: `${cursor + 2}  Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: 3,
+        postId: cursor + 3,
         User: User[0],
-        content: `${3} Stop following me. I'm too famous.`,
+        content: `${cursor + 3} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: 4,
+        postId: cursor + 4,
         User: User[0],
-        content: `${4} Stop following me. I'm too famous.`,
+        content: `${cursor + 4} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: 5,
+        postId: cursor + 5,
         User: User[0],
-        content: `${5} Stop following me. I'm too famous.`,
+        content: `${cursor + 5} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
@@ -293,7 +300,7 @@ export const handlers = [
     ]);
   }),
   http.get('/api/followRecommends', ({ request }) => {
-    return HttpResponse.json(User);
+    return HttpResponse.json(User[1]);
   }),
   http.get('/api/hashtags/trends', ({ request }) => {
     return HttpResponse.json([

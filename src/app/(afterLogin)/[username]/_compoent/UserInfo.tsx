@@ -17,8 +17,6 @@ export default function UserInfo({ username }: Props) {
     gcTime: 300 * 1000,
   });
 
-  debugger;
-
   if (error) {
     return (
       <>
