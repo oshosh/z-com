@@ -26,16 +26,16 @@ export default function LoginModal() {
       const {
         user: { content },
       } = (await getSession()) as any;
-
-      if (content.success === 404 || content.success === 401) {
-        // 보안으로 따로 검증 안함
+      if (content.code === 404 || content.code === 401) {
+        // 보안상 따로 검증 안함
         if (content.data === 'no_user') {
-          //
+          // 회원 없음
+          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
         }
         if (content.data === 'wrong_password') {
-          //
+          // 비번 틀림
+          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
         }
-        setMessage('아이디와 비밀번호가 일치하지 않습니다.');
       } else {
         router.replace('/home');
       }

@@ -2,19 +2,18 @@
 
 import { signOut, useSession } from 'next-auth/react';
 import style from './logoutButton.module.css';
-import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   me: Session | null;
 };
 export default function LogoutButton({ me }: Props) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const onLogout = () => {
-    signOut({ redirect: false }).then(() => {
-      router.replace('/');
-    });
+    queryClient.clear();
+    signOut({ callbackUrl: '/' });
   };
 
   if (!me?.user) {

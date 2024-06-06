@@ -57,6 +57,26 @@ export const {
       return session;
     },
   },
+  events: {
+    signOut(data) {
+      console.log(
+        'auth.ts events signout',
+        'session' in data && data.session,
+        'token' in data && data.token
+      );
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    },
+    session(data) {
+      console.log(
+        'auth.ts events session',
+        'session' in data && data.session,
+        'token' in data && data.token
+      );
+    },
+  },
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -77,9 +97,9 @@ export const {
           const parsed = cookie.parse(setCookie);
           cookies().set('connect.sid', parsed['connect.sid'], parsed); // 브라우저에 쿠키를 심어주는 것
         }
-        // if (!authResponse.ok) {
-        //   return {null};
-        // }
+        if (!authResponse.ok) {
+          return null;
+        }
 
         const user = await authResponse.json();
         console.log('CredentialsProvider user', user);

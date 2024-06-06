@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEventHandler, FormEventHandler, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, useEffect, useRef, useState } from 'react';
 import style from './postForm.module.css';
 import { Session } from 'next-auth';
 
@@ -22,6 +22,10 @@ export default function PostForm({ me }: Props) {
   const onSubmit: FormEventHandler = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    console.log(me);
+  }, [me]);
 
   if (!me) {
     return null;
