@@ -92,6 +92,8 @@ export const {
           }),
         });
 
+        // authjs.session-token -> 프론트 서버 로그인 토큰
+        // connect.sid -> 백엔드 서버에 로그인 된 사용자가 요청하는 경우 이걸 보내줘야함
         let setCookie = authResponse.headers.get('Set-Cookie');
         if (setCookie) {
           const parsed = cookie.parse(setCookie);

@@ -1,15 +1,20 @@
 'use client';
 
-import { ChangeEventHandler, FormEventHandler, useEffect, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEvent, useRef, useState } from 'react';
 import style from './postForm.module.css';
 import { Session } from 'next-auth';
+import TextareaAutosize from 'react-textarea-autosize';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Post } from '@/model/Post';
 
 type Props = {
   me: Session | null;
 };
 export default function PostForm({ me }: Props) {
   const imageRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<Array<{ dataUrl: string; file: File } | null>>([]);
   const [content, setContent] = useState('');
+  const queryClient = useQueryClient();
 
   const onClickButton = () => {
     imageRef.current?.click();
@@ -19,31 +24,138 @@ export default function PostForm({ me }: Props) {
     setContent(e.target.value);
   };
 
-  const onSubmit: FormEventHandler = (e) => {
-    e.preventDefault();
+  const mutation = useMutation({
+    mutationFn: async (e: FormEvent) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('content', content);
+      preview.forEach((p) => {
+        p && formData.append('images', p.file);
+      });
+
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
+        method: 'post',
+        credentials: 'include',
+        body: formData,
+      });
+    },
+    async onMutate() {
+      const context = 'onMutate context 전달';
+      return context;
+    },
+    async onSettled() {
+      console.log('성공 혹은 실패 호출');
+    },
+    async onSuccess(response, variable, context) {
+      console.log(context);
+      const newPost = await response.json();
+      setContent('');
+      setPreview([]);
+
+      if (queryClient.getQueryData(['posts', 'recommends'])) {
+        queryClient.setQueryData(['posts', 'recommends'], (prevData: { pages: Post[][] }) => {
+          const shallow = {
+            ...prevData,
+            pages: [...prevData.pages],
+          };
+          shallow.pages[0] = [...shallow.pages[0]];
+          shallow.pages[0].unshift(newPost);
+          return shallow;
+        });
+      }
+      if (queryClient.getQueryData(['posts', 'followings'])) {
+        queryClient.setQueryData(['posts', 'followings'], (prevData: { pages: Post[][] }) => {
+          const shallow = {
+            ...prevData,
+            pages: [...prevData.pages],
+          };
+          shallow.pages[0] = [...shallow.pages[0]];
+          shallow.pages[0].unshift(newPost);
+          return shallow;
+        });
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['trends'],
+      });
+    },
+    onError(error) {
+      console.error(error);
+      alert('업로드 중 에러가 발생했습니다.');
+    },
+  });
+
+  const onRemoveImage = (index: number) => () => {
+    setPreview((prevPreview) => {
+      const prev = [...prevPreview];
+      prev[index] = null;
+      return prev;
+    });
   };
 
-  useEffect(() => {
-    console.log(me);
-  }, [me]);
+  const onUpload: ChangeEventHandler<HTMLInputElement> = (e) => {
+    e.preventDefault();
+    if (e.target.files) {
+      Array.from(e.target.files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview((prevPreview) => {
+            const prev = [...prevPreview];
+            prev[index] = {
+              dataUrl: reader.result as string,
+              file,
+            };
+            return prev;
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
 
   if (!me) {
     return null;
   }
 
   return (
-    <form className={style.postForm} onSubmit={onSubmit}>
+    <form className={style.postForm} onSubmit={mutation.mutate}>
       <div className={style.postUserSection}>
         <div className={style.postUserImage}>
           <img src={me.user.image as string} alt={me.user.uid as string} />
         </div>
       </div>
       <div className={style.postInputSection}>
-        <textarea value={content} onChange={onChange} placeholder='무슨 일이 일어나고 있나요?' />
+        <TextareaAutosize
+          value={content}
+          onChange={onChange}
+          placeholder='무슨 일이 일어나고 있나요?'
+        />
+        <div style={{ display: 'flex' }}>
+          {preview.map(
+            (v, index) =>
+              v && (
+                <div key={index} style={{ flex: 1 }} onClick={onRemoveImage(index)}>
+                  <img
+                    src={v.dataUrl}
+                    alt='미리보기'
+                    style={{ width: '100%', objectFit: 'contain', maxHeight: 100 }}
+                  />
+                </div>
+              )
+          )}
+        </div>
         <div className={style.postButtonSection}>
           <div className={style.footerButtons}>
             <div className={style.footerButtonLeft}>
-              <input type='file' name='imageFiles' multiple hidden ref={imageRef} />
+              <input
+                type='file'
+                name='imageFiles'
+                accept='image/gif, image/jpeg, image/png'
+                multiple
+                hidden
+                ref={imageRef}
+                onChange={onUpload}
+              />
               <button className={style.uploadButton} type='button' onClick={onClickButton}>
                 <svg width={24} viewBox='0 0 24 24' aria-hidden='true'>
                   <g>
