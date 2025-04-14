@@ -5,9 +5,10 @@ import style from './search.module.css';
 import SearchResult from './_component/SearchResult';
 
 type Props = {
-  searchParams: { q: string; f?: string; pf?: string };
+  searchParams: Promise<{ q: string; f?: string; pf?: string }>;
 };
-export default function Search({ searchParams }: Props) {
+export default async function Search(props: Props) {
+  const searchParams = await props.searchParams;
   return (
     <main className={style.main}>
       <div className={style.searchTop}>

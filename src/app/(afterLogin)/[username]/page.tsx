@@ -8,11 +8,12 @@ import { getUser } from './_lib/getUser';
 import UserInfo from './_compoent/UserInfo';
 
 type Props = {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 };
-export default async function Profile({ params }: Props) {
+export default async function Profile(props: Props) {
+  const params = await props.params;
   const { username } = params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({

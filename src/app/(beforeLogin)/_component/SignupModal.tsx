@@ -1,7 +1,7 @@
 'use client';
-
+import { useActionState } from 'react';
 import BackButton from '@/app/(afterLogin)/_component/BackButton';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import onSubmit from '../_lib/signup';
 import style from './signup.module.css';
 
@@ -26,7 +26,7 @@ function showMessage(message: string | null) {
 }
 
 export default function SignupModal() {
-  const [state, formAction] = useFormState(onSubmit, { message: null });
+  const [state, formAction] = useActionState(onSubmit, { message: null });
   const { pending, data, method, action } = useFormStatus();
 
   return (

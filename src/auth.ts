@@ -1,6 +1,6 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { cookies } from 'next/headers';
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 import cookie from 'cookie';
 import { JWT } from 'next-auth/jwt';
 
@@ -97,7 +97,12 @@ export const {
         let setCookie = authResponse.headers.get('Set-Cookie');
         if (setCookie) {
           const parsed = cookie.parse(setCookie);
-          cookies().set('connect.sid', parsed['connect.sid'], parsed); // 브라우저에 쿠키를 심어주는 것
+          const cookiesStore = await cookies();
+          (cookiesStore as unknown as UnsafeUnwrappedCookies).set(
+            'connect.sid',
+            parsed['connect.sid'],
+            parsed
+          ); // 브라우저에 쿠키를 심어주는 것
         }
         if (!authResponse.ok) {
           return null;

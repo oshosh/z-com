@@ -9,9 +9,10 @@ import { getComments } from './_lib/getComments';
 import { getSinglePost } from './_lib/getSinglePost';
 
 type Props = {
-  params: { id: string; username: string };
+  params: Promise<{ id: string; username: string }>;
 };
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const { id } = params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({ queryKey: ['posts', id], queryFn: getSinglePost });

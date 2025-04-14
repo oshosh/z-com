@@ -9,9 +9,10 @@ import Comments from '@/app/(afterLogin)/[username]/status/[id]/_component/Comme
 import ImageZone from './_component/ImageZone';
 
 type Props = {
-  params: { id: string; username: string };
+  params: Promise<{ id: string; username: string }>;
 };
-export default async function Default({ params }: Props) {
+export default async function Default(props: Props) {
+  const params = await props.params;
   const { id } = params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({ queryKey: ['posts', id], queryFn: getSinglePost });
