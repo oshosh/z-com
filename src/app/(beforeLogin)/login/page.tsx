@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation';
 import BeforeLogin from '@/app/(beforeLogin)/_component/BeforeLogin';
 import { useSession } from 'next-auth/react';
 
-export default function Logion() {
+export default function LoginPage() {
   const router = useRouter();
+  // 서버에서 리다이렉트하면 인터셉트 안됨
   router.replace('/i/flow/login');
   const session = useSession();
 
@@ -16,11 +17,7 @@ export default function Logion() {
 
   return (
     <>
-      <div>여기는 페러럴 라우트</div>
-      <div>여기는 페러럴 라우트</div>
-      <div>여기는 페러럴 라우트</div>
-      <div>여기는 페러럴 라우트</div>
-      <div>여기는 페러럴 라우트</div>
+      <div>여기는 원래 로그인 페이지 입니다.</div>
       <BeforeLogin />
     </>
   );

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { MSWComponent } from './_component/MSWComponent';
 import './globals.css';
 import AuthSession from './_component/AuthSession';
+import { ReactNode } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function RootLayout({ children }: Props) {
