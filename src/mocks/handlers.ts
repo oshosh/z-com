@@ -1,5 +1,5 @@
+import { http, HttpResponse } from 'msw';
 import { faker } from '@faker-js/faker';
-import { delay, http, HttpResponse, StrictResponse } from 'msw';
 
 function generateDate() {
   const lastWeek = new Date(Date.now());
@@ -15,10 +15,12 @@ const User = [
   { id: 'zerohch0', nickname: '제로초', image: '/5Udwvqim.jpg' },
   { id: 'leoturtle', nickname: '레오', image: faker.image.avatar() },
 ];
-const Posts = [];
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const handlers = [
-  http.post('/api/login', () => {
+  http.post(`${baseUrl}/api/login`, () => {
     console.log('로그인');
     return HttpResponse.json(User[1], {
       headers: {
@@ -26,7 +28,7 @@ export const handlers = [
       },
     });
   }),
-  http.post('/api/logout', () => {
+  http.post(`${baseUrl}/api/logout`, () => {
     console.log('로그아웃');
     return new HttpResponse(null, {
       headers: {
@@ -34,22 +36,21 @@ export const handlers = [
       },
     });
   }),
-  http.post('/api/users', async ({ request }) => {
+  http.post(`${baseUrl}/api/users`, async ({ request }) => {
     console.log('회원가입');
     // return HttpResponse.text(JSON.stringify('user_exists'), {
     //   status: 403,
-    // })
+    // });
     return HttpResponse.text(JSON.stringify('ok'), {
       headers: {
-        'Set-Cookie': 'connect.sid=msw-cookie;HttpOnly;Path=/;Max-Age=0',
+        'Set-Cookie': 'connect.sid=msw-cookie;HttpOnly;Path=/',
       },
     });
   }),
-  http.get('/api/posts/recommends', async ({ request }) => {
-    await delay(1000);
+  http.get(`${baseUrl}/api/postRecommends`, async ({ request }) => {
+    await delay(3000);
     const url = new URL(request.url);
     const cursor = parseInt(url.searchParams.get('cursor') as string) || 0;
-
     return HttpResponse.json([
       {
         postId: cursor + 1,
@@ -100,50 +101,47 @@ export const handlers = [
       },
     ]);
   }),
-  http.get('/api/posts/followings', async ({ request }) => {
-    await delay(1000);
-    const url = new URL(request.url);
-    const cursor = parseInt(url.searchParams.get('cursor') as string) || 0;
-
+  http.get(`${baseUrl}/api/followingPosts`, async ({ request }) => {
+    await delay(3000);
     return HttpResponse.json([
       {
-        postId: cursor + 1,
+        postId: 1,
         User: User[0],
-        content: `${cursor + 1}  Stop following me. I'm too famous.`,
+        content: `${1} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: cursor + 2,
+        postId: 2,
         User: User[0],
-        content: `${cursor + 2}  Stop following me. I'm too famous.`,
+        content: `${2} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: cursor + 3,
+        postId: 3,
         User: User[0],
-        content: `${cursor + 3} Stop following me. I'm too famous.`,
+        content: `${3} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: cursor + 4,
+        postId: 4,
         User: User[0],
-        content: `${cursor + 4} Stop following me. I'm too famous.`,
+        content: `${4} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
       {
-        postId: cursor + 5,
+        postId: 5,
         User: User[0],
-        content: `${cursor + 5} Stop following me. I'm too famous.`,
+        content: `${5} Stop following me. I'm too famous.`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
     ]);
   }),
-  http.get('/api/search/:tag', ({ request, params }) => {
+  http.get(`${baseUrl}/api/search/:tag`, ({ request, params }) => {
     const { tag } = params;
     return HttpResponse.json([
       {
@@ -183,7 +181,7 @@ export const handlers = [
       },
     ]);
   }),
-  http.get('/api/users/:userId/posts', ({ request, params }) => {
+  http.get(`${baseUrl}/api/users/:userId/posts`, ({ request, params }) => {
     const { userId } = params;
     return HttpResponse.json([
       {
@@ -223,7 +221,7 @@ export const handlers = [
       },
     ]);
   }),
-  http.get('/api/users/:userId', ({ request, params }): StrictResponse<any> => {
+  http.get(`${baseUrl}/api/users/:userId`, ({ request, params }) => {
     const { userId } = params;
     const found = User.find((v) => v.id === userId);
     if (found) {
@@ -236,9 +234,8 @@ export const handlers = [
       }
     );
   }),
-  http.get('/api/posts/:postId', ({ request, params }): StrictResponse<any> => {
+  http.get(`${baseUrl}/api/posts/:postId`, ({ request, params }) => {
     const { postId } = params;
-    // post 페이지는 10개 까지만
     if (parseInt(postId as string) > 10) {
       return HttpResponse.json(
         { message: 'no_such_post' },
@@ -250,7 +247,7 @@ export const handlers = [
     return HttpResponse.json({
       postId,
       User: User[0],
-      content: `${1} 게시글 아이뒤 ${postId}의 내용 12312312`,
+      content: `${1} 게시글 아이디 ${postId}의 내용`,
       Images: [
         { imageId: 1, link: faker.image.urlLoremFlickr() },
         { imageId: 2, link: faker.image.urlLoremFlickr() },
@@ -259,13 +256,13 @@ export const handlers = [
       createdAt: generateDate(),
     });
   }),
-  http.get('/api/posts/:postId/comments', ({ request, params }) => {
+  http.get(`${baseUrl}/api/posts/:postId/comments`, ({ request, params }) => {
     const { postId } = params;
     return HttpResponse.json([
       {
         postId: 1,
         User: User[0],
-        content: `${1} 게시글 ${postId}의 답글111111111123123123123`,
+        content: `${1} 게시글 ${postId}의 답글`,
         Images: [{ imageId: 1, link: faker.image.urlLoremFlickr() }],
         createdAt: generateDate(),
       },
@@ -299,10 +296,10 @@ export const handlers = [
       },
     ]);
   }),
-  http.get('/api/followRecommends', ({ request }) => {
-    return HttpResponse.json(User[1]);
+  http.get(`${baseUrl}/api/followRecommends`, ({ request }) => {
+    return HttpResponse.json(User);
   }),
-  http.get('/api/hashtags/trends', ({ request }) => {
+  http.get(`${baseUrl}/api/trends`, ({ request }) => {
     return HttpResponse.json([
       { tagId: 1, title: '제로초', count: 1264 },
       { tagId: 2, title: '원초', count: 1264 },

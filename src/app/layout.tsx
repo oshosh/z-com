@@ -1,10 +1,14 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { MSWComponent } from './_component/MSWComponent';
+import { MSWProvider } from './_component/MSWComponent';
 import './globals.css';
 import AuthSession from './_component/AuthSession';
 import { ReactNode } from 'react';
 
+if (process.env.NEXT_RUNTIME === 'nodejs' && process.env.NODE_ENV !== 'production') {
+  const { server } = require('@/mocks/http.ts');
+  server.listen();
+}
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -20,8 +24,9 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <MSWComponent />
-        <AuthSession>{children}</AuthSession>
+        <MSWProvider>
+          <AuthSession>{children}</AuthSession>
+        </MSWProvider>
       </body>
     </html>
   );

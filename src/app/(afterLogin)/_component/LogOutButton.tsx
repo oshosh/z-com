@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut, useSession } from 'next-auth/react';
-import style from './logoutButton.module.css';
+import style from './logOutButton.module.css';
 import { Session } from 'next-auth';
 import { useQueryClient } from '@tanstack/react-query';
 
