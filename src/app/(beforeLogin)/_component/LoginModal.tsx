@@ -1,9 +1,9 @@
 'use client';
 
 import style from '@/app/(beforeLogin)/_component/login.module.css';
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { getSession, signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 
 export default function LoginModal() {
   const [id, setId] = useState('');

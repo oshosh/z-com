@@ -4,7 +4,7 @@ import Post from '@/app/(afterLogin)/_component/Post';
 import { getPostRecommends } from '@/app/(afterLogin)/home/_lib/getPostRecommends';
 import styles from '@/app/(afterLogin)/home/home.module.css';
 import { Post as IPost } from '@/model/Post';
-import { InfiniteData, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -14,7 +14,7 @@ import { useInView } from 'react-intersection-observer';
 export default function PostRecommends() {
   // hasNextPage 다음 페이지가 있는지 여부
   const { data, fetchNextPage, hasNextPage, isFetching, isPending, isLoading, isError } =
-    useSuspenseInfiniteQuery<
+    useInfiniteQuery<
       IPost[],
       Object,
       InfiniteData<IPost[]>,
@@ -26,7 +26,9 @@ export default function PostRecommends() {
       staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
       gcTime: 300 * 1000,
       initialPageParam: 0, // [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]] => 2차원 배열 형태로 가지고 있음
-      getNextPageParam: (lastPage) => lastPage.at(-1)?.postId,
+      getNextPageParam: (lastPage) => {
+        return lastPage.at(-1)?.postId;
+      },
     });
 
   const { ref, inView } = useInView({

@@ -1,16 +1,15 @@
-import FollowRecommend from '@/app/(afterLogin)/_component/FollowRecommend';
 import LogOutButton from '@/app/(afterLogin)/_component/LogOutButton';
 import NavMenu from '@/app/(afterLogin)/_component/NavMenu';
 import RightSearchZone from '@/app/(afterLogin)/_component/RightSearchZone';
 import TrendSection from '@/app/(afterLogin)/_component/TrendSection';
 import style from '@/app/(afterLogin)/layout.module.css';
+import { auth } from '@/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import ZLogo from '../../../public/zlogo.png';
-import { auth } from '@/auth';
-import RQProvider from './_component/RQProvider';
 import FollowRecommendSection from './_component/FollowRecommendSection';
+import RQProvider from './_component/RQProvider';
 
 type Props = { children: ReactNode; modal: ReactNode };
 export default async function AfterLoginLayout({ children, modal }: Props) {

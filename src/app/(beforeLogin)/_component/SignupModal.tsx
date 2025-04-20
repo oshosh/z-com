@@ -109,4 +109,6 @@ export default function SignupModal() {
  *
  * NEXT 15로 넘어오면서 Form의 형태가 function action과 string action으로 나뉘었다.
  * function action은 POST에서 적절하며 string action은 GET에서 적절하다.
+ *
+ * Form의 string action의 경우 기존의 클라이언트 form에 비해 prefetch 가 가능하여 이동할 페이지를 미리 로드해 올 수 있음
  */

@@ -1,8 +1,8 @@
+import cookie from 'cookie';
 import NextAuth, { DefaultSession } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
-import cookie from 'cookie';
-import { JWT } from 'next-auth/jwt';
 
 declare module 'next-auth' {
   export interface Session {
@@ -59,22 +59,22 @@ export const {
   },
   events: {
     signOut(data) {
-      console.log(
-        'auth.ts events signout',
-        'session' in data && data.session,
-        'token' in data && data.token
-      );
+      // console.log(
+      //   'auth.ts events signout',
+      //   'session' in data && data.session,
+      //   'token' in data && data.token
+      // );
       fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/logout`, {
         method: 'POST',
         credentials: 'include',
       });
     },
     session(data) {
-      console.log(
-        'auth.ts events session',
-        'session' in data && data.session,
-        'token' in data && data.token
-      );
+      // console.log(
+      //   'auth.ts events session',
+      //   'session' in data && data.session,
+      //   'token' in data && data.token
+      // );
     },
   },
   providers: [
@@ -98,18 +98,19 @@ export const {
         if (setCookie) {
           const parsed = cookie.parse(setCookie);
           const cookiesStore = await cookies();
-          (cookiesStore as unknown as UnsafeUnwrappedCookies).set(
-            'connect.sid',
-            parsed['connect.sid'],
-            parsed
-          ); // 브라우저에 쿠키를 심어주는 것
+          if (parsed['connect.sid']) {
+            (cookiesStore as unknown as UnsafeUnwrappedCookies).set(
+              'connect.sid',
+              parsed['connect.sid']
+            ); // 브라우저에 쿠키를 심어주는 것
+          }
         }
         if (!authResponse.ok) {
           return null;
         }
 
         const user = await authResponse.json();
-        console.log('CredentialsProvider user', user);
+        // console.log('CredentialsProvider user', user);
 
         return {
           uid: user.id,

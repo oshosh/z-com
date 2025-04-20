@@ -47,9 +47,10 @@ export const handlers = [
       },
     });
   }),
-  http.get(`${baseUrl}/api/postRecommends`, async ({ request }) => {
+  http.get(`${baseUrl}/api/posts/recommends`, async ({ request }) => {
     await delay(3000);
     const url = new URL(request.url);
+    console.log('url', '호출???????????????????????????');
     const cursor = parseInt(url.searchParams.get('cursor') as string) || 0;
     return HttpResponse.json([
       {
