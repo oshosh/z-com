@@ -1,15 +1,12 @@
 'use client';
 
-import { Suspense, use } from 'react';
 import { handlers } from '@/mocks/handlers';
+import { Suspense, use } from 'react';
 
 const mockingEnabledPromise =
   typeof window !== 'undefined'
     ? import('@/mocks/browser').then(async ({ default: worker }) => {
-        if (
-          process.env.NODE_ENV === 'production' ||
-          process.env.NEXT_PUBLIC_MSW_ENABLED === 'false'
-        ) {
+        if (process.env.NODE_ENV === 'production') {
           return;
         }
         await worker.start({

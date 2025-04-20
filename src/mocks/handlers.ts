@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw';
 import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
 
 function generateDate() {
   const lastWeek = new Date(Date.now());

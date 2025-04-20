@@ -1,12 +1,12 @@
 'use client';
 
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
-import { getPostRecommends } from '@/app/(afterLogin)/home/_lib/getPostRecommends';
 import Post from '@/app/(afterLogin)/_component/Post';
-import { Post as IPost } from '@/model/Post';
-import { useInView } from 'react-intersection-observer';
-import { Fragment, useEffect } from 'react';
+import { getPostRecommends } from '@/app/(afterLogin)/home/_lib/getPostRecommends';
 import styles from '@/app/(afterLogin)/home/home.module.css';
+import { Post as IPost } from '@/model/Post';
+import { InfiniteData, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { Fragment, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 // 데이터를 완전 처음 불러오는 경우 isPending이 true 상태 에서 데이터를 가져오는 경우
 // false로 변경 되면서 isFetching 상태가 true로 변경 그때 isLoading도 true가 된다.
@@ -14,7 +14,7 @@ import styles from '@/app/(afterLogin)/home/home.module.css';
 export default function PostRecommends() {
   // hasNextPage 다음 페이지가 있는지 여부
   const { data, fetchNextPage, hasNextPage, isFetching, isPending, isLoading, isError } =
-    useInfiniteQuery<
+    useSuspenseInfiniteQuery<
       IPost[],
       Object,
       InfiniteData<IPost[]>,

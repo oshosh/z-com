@@ -1,6 +1,6 @@
 'use client';
-import { useActionState } from 'react';
 import BackButton from '@/app/(afterLogin)/_component/BackButton';
+import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import onSubmit from '../_lib/signup';
 import style from './signup.module.css';
@@ -104,3 +104,9 @@ export default function SignupModal() {
     </>
   );
 }
+/**
+ * https://nextjs.org/docs/app/api-reference/components/form#action-string-props
+ *
+ * NEXT 15로 넘어오면서 Form의 형태가 function action과 string action으로 나뉘었다.
+ * function action은 POST에서 적절하며 string action은 GET에서 적절하다.
+ */
