@@ -21,7 +21,9 @@ export default function SearchResult({ searchParams }: Props) {
     queryKey: ['posts', 'search', searchParams],
     queryFn: getSearchResult,
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.at(-1)?.postId,
+    getNextPageParam: (lastPage) => {
+      return lastPage.at(-1)?.postId;
+    },
     staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
     gcTime: 300 * 1000,
   });

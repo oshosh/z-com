@@ -7,7 +7,6 @@ export async function getFollowingPosts({ pageParam }: Props) {
         tags: ['posts', 'followings'],
       },
       credentials: 'include',
-      cache: 'no-store',
     }
   );
   // The return value is *not* serialized

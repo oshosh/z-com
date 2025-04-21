@@ -23,8 +23,9 @@ export default function PostRecommends() {
     >({
       queryKey: ['posts', 'recommends'],
       queryFn: getPostRecommends,
-      staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
-      gcTime: 300 * 1000,
+      // staleTime을 gcTime보다 길게 둬야 의도한 대로 동작한다. 캐시 유지 시간과 캐시 메모리를 비우는 시간이 맞음
+      staleTime: 60 * 1000, // 기본값은 0이고 ms 단위로 설정 1분 동안 캐시 데이터 유지(fresh -> stale)
+      gcTime: 300 * 1000, // 5분 이후 캐시 데이터 삭제(key 사용여부 -> inactive) 하지만 캐시 데이터가 사라지는 것은 아니기 때문에 ['posts', 'recommends']가 1분 설정 안으로 돌아오면 캐시 데이터가 사라지지 않는다.
       initialPageParam: 0, // [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]] => 2차원 배열 형태로 가지고 있음
       getNextPageParam: (lastPage) => {
         return lastPage.at(-1)?.postId;
