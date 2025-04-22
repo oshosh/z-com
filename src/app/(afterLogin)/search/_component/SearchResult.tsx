@@ -43,9 +43,10 @@ export default function SearchResult({ searchParams }: Props) {
     <>
       {data?.pages?.map((page, i) => (
         <Fragment key={i}>
-          {page.map((post) => (
-            <Post key={post.postId} post={post} />
-          ))}
+          {page.map((post) => {
+            debugger;
+            return <Post key={post.postId} post={post} />;
+          })}
         </Fragment>
       ))}
       <div ref={ref} style={{ height: 50 }} />

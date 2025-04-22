@@ -15,9 +15,9 @@ export default function UserPosts({ username }: Props) {
     staleTime: 60 * 1000, // fresh -> stale, 5분이라는 기준
     gcTime: 300 * 1000,
   });
+  // user 정보가 없으면 상위 profile 에서 react-query를 호출 한걸 getQueryData로 가져옴
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(['users', username]);
-  // console.log('user', user);
   if (user) {
     return data?.map((post) => <Post key={post.postId} post={post} />);
   }

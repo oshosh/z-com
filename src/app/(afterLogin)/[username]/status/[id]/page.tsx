@@ -26,9 +26,12 @@ export default async function Page(props: Props) {
           <BackButton />
           <h3 className={style.headerTitle}>게시하기</h3>
         </div>
+        <div>싱글포스트</div>
         <SinglePost id={id} />
+        <div>댓글 폼</div>
         <CommentForm id={id} />
         <div>
+          <div>댓글</div>
           <Comments id={id} />
         </div>
       </HydrationBoundary>
