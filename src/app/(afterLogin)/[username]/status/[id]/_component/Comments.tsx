@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Post as IPost } from '@/model/Post';
 import { getComments } from '@/app/(afterLogin)/[username]/status/[id]/_lib/getComments';
 import Post from '@/app/(afterLogin)/_component/Post';
+import { Fragment } from 'react';
 
 type Props = {
   id: string;
@@ -23,10 +24,10 @@ export default function Comments({ id }: Props) {
   if (post) {
     return data?.map((post) => {
       return (
-        <>
+        <Fragment key={post.postId}>
           여기는 답글
           <Post post={post} key={post.postId} />
-        </>
+        </Fragment>
       );
     });
   }

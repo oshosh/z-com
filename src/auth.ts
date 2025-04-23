@@ -4,6 +4,7 @@ import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 
+// content 관련에서 type이 지금 맞지는 않음...
 declare module 'next-auth' {
   export interface Session {
     uid?: string | undefined | null;
