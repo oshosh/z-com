@@ -16,31 +16,42 @@ export default function LoginModal() {
     setMessage('');
 
     try {
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         username: id,
         password,
         redirect: false, // true로 하면 server에서 redirect가 동작 됨
       }); // next-auth/react -> 클라이언트 사이드 일 경우 vs 서버인 경우는 @/auth의 signIn() 사용
 
-      //https://next-auth.js.org/getting-started/client
-      const {
-        user: { content },
-      } = (await getSession()) as any;
-      if (content.code === 404 || content.code === 401) {
-        // 보안상 따로 검증 안함
-        if (content.data === 'no_user') {
-          // 회원 없음
-          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
-        }
-        if (content.data === 'wrong_password') {
-          // 비번 틀림
-          setMessage('아이디와 비밀번호가 일치하지 않습니다.');
-        }
+      if (result.code === 'wrong_password' || result.code === 'no_user') {
+        setMessage('아이디와 비밀번호가 일치하지 않습니다.');
       } else {
         router.replace('/home');
       }
+
+      console.log('result', result);
+      //https://next-auth.js.org/getting-started/client
+      // const {
+      //   user: { content },
+      // } = (await getSession()) as any;
+
+      // if (content.code === 404 || content.code === 401) {
+      //   // 보안상 따로 검증 안함
+      //   if (content.data === 'no_user') {
+      //     // 회원 없음
+      //     console.log('회원 없음');
+      //     setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+      //   }
+      //   if (content.data === 'wrong_password') {
+      //     // 비번 틀림
+      //     console.log('비번 틀림');
+      //     setMessage('아이디와 비밀번호가 일치하지 않습니다.');
+      //   }
+      // } else {
+      //   router.replace('/home');
+      // }
     } catch (err) {
       console.error(err);
+      console.log('CredentialsSignin 제대로 작동하는지 확인해보자');
       setMessage('아이디와 비밀번호가 일치하지 않습니다.');
     }
   };

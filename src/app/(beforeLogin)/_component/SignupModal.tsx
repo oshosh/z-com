@@ -47,6 +47,7 @@ export default function SignupModal() {
                   id='id'
                   name='id'
                   className={style.input}
+                  defaultValue={state?.id as string}
                   type='text'
                   placeholder=''
                   required
@@ -60,9 +61,10 @@ export default function SignupModal() {
                   id='name'
                   name='name'
                   className={style.input}
+                  defaultValue={state?.nickname as string}
                   type='text'
                   placeholder=''
-                  required
+                  // required
                 />
               </div>
               <div className={style.inputDiv}>
@@ -75,6 +77,7 @@ export default function SignupModal() {
                   className={style.input}
                   type='password'
                   placeholder=''
+                  defaultValue={state?.password as string}
                   required
                 />
               </div>
@@ -88,6 +91,7 @@ export default function SignupModal() {
                   className={style.input}
                   type='file'
                   accept='image/*'
+                  defaultValue={state?.image as string}
                   required
                 />
               </div>

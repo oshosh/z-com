@@ -1,5 +1,5 @@
 import cookie from 'cookie';
-import NextAuth, { DefaultSession } from 'next-auth';
+import NextAuth, { CredentialsSignin, DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
@@ -107,7 +107,14 @@ export const {
           }
         }
         if (!authResponse.ok) {
-          return null;
+          const credentialsSignin = new CredentialsSignin();
+          console.log('authResponse.status', authResponse.status);
+          if (authResponse.status === 404) {
+            credentialsSignin.code = 'no_user';
+          } else if (authResponse.status === 401) {
+            credentialsSignin.code = 'wrong_password';
+          }
+          throw credentialsSignin;
         }
 
         const user = await authResponse.json();

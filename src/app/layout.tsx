@@ -5,10 +5,18 @@ import './globals.css';
 import AuthSession from './_component/AuthSession';
 import { ReactNode } from 'react';
 
-if (process.env.NEXT_RUNTIME === 'nodejs' && process.env.NODE_ENV !== 'production') {
+if (
+  process.env.NEXT_RUNTIME === 'nodejs' &&
+  process.env.NODE_ENV !== 'production' &&
+  process.env.NEXT_PUBLIC_API_MOCKING !== 'disabled'
+) {
+  console.log('MSW 서버 실행??????');
   const { server } = require('@/mocks/http.ts');
   server.listen();
+} else {
+  console.log('MSW 서버 실행 안함');
 }
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

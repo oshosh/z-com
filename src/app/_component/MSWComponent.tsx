@@ -6,7 +6,15 @@ import { Suspense, use } from 'react';
 const mockingEnabledPromise =
   typeof window !== 'undefined'
     ? import('@/mocks/browser').then(async ({ default: worker }) => {
-        if (process.env.NODE_ENV === 'production') {
+        console.log(
+          'MSWComponent 지금상태는?',
+          process.env.NODE_ENV,
+          process.env.NEXT_PUBLIC_API_MOCKING
+        );
+        if (
+          process.env.NODE_ENV === 'production' ||
+          process.env.NEXT_PUBLIC_API_MOCKING === 'disabled'
+        ) {
           return;
         }
         await worker.start({

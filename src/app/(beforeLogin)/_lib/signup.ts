@@ -27,7 +27,21 @@ export default async (prevState: any, formData: FormData) => {
     });
     console.log(response.status);
     if (response.status === 403) {
-      return { message: 'user_exists' };
+      return {
+        message: 'user_exists',
+        id: formData.get('id'),
+        nickname: formData.get('nickname'),
+        password: formData.get('password'),
+        image: formData.get('image'),
+      };
+    } else if (response.status === 400) {
+      return {
+        message: (await response.json()).data[0],
+        id: formData.get('id'),
+        nickname: formData.get('nickname'),
+        password: formData.get('password'),
+        image: formData.get('image'),
+      };
     }
     console.log(await response.json());
     shouldRedirect = true;

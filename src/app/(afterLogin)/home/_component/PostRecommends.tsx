@@ -4,7 +4,7 @@ import Post from '@/app/(afterLogin)/_component/Post';
 import { getPostRecommends } from '@/app/(afterLogin)/home/_lib/getPostRecommends';
 import styles from '@/app/(afterLogin)/home/home.module.css';
 import { Post as IPost } from '@/model/Post';
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -14,7 +14,7 @@ import { useInView } from 'react-intersection-observer';
 export default function PostRecommends() {
   // hasNextPage 다음 페이지가 있는지 여부
   const { data, fetchNextPage, hasNextPage, isFetching, isPending, isLoading, isError } =
-    useInfiniteQuery<
+    useSuspenseInfiniteQuery<
       IPost[],
       Object,
       InfiniteData<IPost[]>,
