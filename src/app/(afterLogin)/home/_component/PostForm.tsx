@@ -6,7 +6,6 @@ import { Session } from 'next-auth';
 import { ChangeEventHandler, FormEvent, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import style from './postForm.module.css';
-
 type Props = {
   me: Session | null;
 };
@@ -41,14 +40,15 @@ export default function PostForm({ me }: Props) {
       });
     },
     async onMutate() {
+      console.log('mutationFn 호출 하면 여기서 호출됨');
       const context = 'onMutate context 전달';
       return context;
     },
     async onSettled() {
-      console.log('성공 혹은 실패 호출');
+      console.log('성공 하든 실패 하든 호출');
     },
     async onSuccess(response, variable, context) {
-      console.log(context);
+      console.log('onMutate로 부터 context 전달 받음', context);
       const newPost = await response.json();
       setContent('');
       setPreview([]);
@@ -130,11 +130,11 @@ export default function PostForm({ me }: Props) {
           onChange={onChange}
           placeholder='무슨 일이 일어나고 있나요?'
         />
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           {preview.map(
             (v, index) =>
               v && (
-                <div key={index} style={{ flex: 1 }} onClick={onRemoveImage(index)}>
+                <div key={index} onClick={onRemoveImage(index)}>
                   <img
                     src={v.dataUrl}
                     alt='미리보기'

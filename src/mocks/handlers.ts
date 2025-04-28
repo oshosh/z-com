@@ -142,7 +142,7 @@ export const handlers = [
       },
     ]);
   }),
-  http.get(`${baseUrl}/api/search/:tag`, ({ request, params }) => {
+  http.get(`${baseUrl}/api/posts/:tag`, ({ request, params }) => {
     const { tag } = params;
     return HttpResponse.json([
       {
@@ -298,11 +298,11 @@ export const handlers = [
     ]);
   }),
   // 팔로우 추천
-  http.get(`${baseUrl}/api/followRecommends`, ({ request }) => {
+  http.get(`${baseUrl}/api/users/followRecommends`, ({ request }) => {
     return HttpResponse.json(User);
   }),
   // 나를 위한 트렌드
-  http.get(`${baseUrl}/api/trends`, ({ request }) => {
+  http.get(`${baseUrl}/api/hashtags/trends`, ({ request }) => {
     return HttpResponse.json([
       { tagId: 1, title: '제로초', count: 1264 },
       { tagId: 2, title: '원초', count: 1264 },

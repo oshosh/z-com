@@ -1,15 +1,60 @@
 'use client';
 import style from '@/app/(afterLogin)/_component/post.module.css';
+import { Post } from '@/model/Post';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import cx from 'classnames';
+import { useSession } from 'next-auth/react';
 import { MouseEventHandler } from 'react';
+import { updateHeartsOnCache } from '../_lib/optimisticAction';
 
 type ActionButtonsProps = {
   white?: boolean;
+  post: Post;
 };
-export default function ActionButtons({ white }: ActionButtonsProps) {
-  const commented = false;
-  const reposted = true;
-  const liked = true;
+export default function ActionButtons({ white, post }: ActionButtonsProps) {
+  const { data: session } = useSession();
+  const commented = !!post.Comments.find((comment) => comment.userId === session?.user.uid);
+  const reposted = !!post.Reposts.find((repost) => repost.userId === session?.user.uid);
+  const liked = !!post.Hearts.find((heart) => heart.userId === session?.user.uid);
+
+  const { postId } = post;
+  const queryClient = useQueryClient();
+
+  const heart = useMutation({
+    mutationFn: () => {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}/heart`, {
+        method: 'post',
+        credentials: 'include',
+      });
+    },
+    onMutate() {
+      updateHeartsOnCache({ queryClient, postId, session, add: true });
+    },
+    onError() {
+      updateHeartsOnCache({ queryClient, postId, session, add: false });
+    },
+    onSettled() {
+      // queryClient.invalidateQueries({
+      //   queryKey: ['posts']
+      // })
+    },
+  });
+
+  const unheart = useMutation({
+    mutationFn: () => {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}/heart`, {
+        method: 'delete',
+        credentials: 'include',
+      });
+    },
+    onMutate() {
+      updateHeartsOnCache({ queryClient, postId, session, add: false });
+    },
+    onError() {
+      updateHeartsOnCache({ queryClient, postId, session, add: true });
+    },
+    onSettled() {},
+  });
 
   const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -24,6 +69,11 @@ export default function ActionButtons({ white }: ActionButtonsProps) {
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
+    if (liked) {
+      unheart.mutate();
+    } else {
+      heart.mutate();
+    }
   };
 
   return (
@@ -38,7 +88,7 @@ export default function ActionButtons({ white }: ActionButtonsProps) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{0 || ''}</div>
+        <div className={style.count}>{post._count.Comments || ''}</div>
       </div>
       <div className={cx(style.repostButton, reposted && style.reposted, white && style.white)}>
         <button onClick={onClickRePost}>
@@ -48,7 +98,7 @@ export default function ActionButtons({ white }: ActionButtonsProps) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{1 || ''}</div>
+        <div className={style.count}>{post._count.Reposts || ''}</div>
       </div>
       <div className={cx([style.heartButton, liked && style.liked, white && style.white])}>
         <button onClick={onClickHeart}>
@@ -58,7 +108,7 @@ export default function ActionButtons({ white }: ActionButtonsProps) {
             </g>
           </svg>
         </button>
-        <div className={style.count}>{1 || ''}</div>
+        <div className={style.count}>{post._count.Hearts || ''}</div>
       </div>
     </div>
   );

@@ -11,8 +11,8 @@ export const getSearchResult: QueryFunction<
 
   const urlSearchParams = new URLSearchParams(searchParams);
   const res = await fetch(
-    // `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?${urlSearchParams.toString()}&cursor=${pageParam}`,
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/search/${searchParams.q}?${urlSearchParams.toString()}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?${urlSearchParams.toString()}&cursor=${pageParam}`,
+    // `${process.env.NEXT_PUBLIC_BASE_URL}/api/search/${searchParams.q}?${urlSearchParams.toString()}`,
     {
       next: {
         tags: ['posts', 'search', searchParams.q],
