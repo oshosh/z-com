@@ -1,17 +1,16 @@
 import { Post } from '@/model/Post';
+import { User } from '@/model/User';
 import { InfiniteData, QueryClient } from '@tanstack/react-query';
 
-export function updateHeartsOnCache({
-  queryClient,
-  postId,
-  session,
-  add,
-}: {
+interface MutationProps {
   queryClient: QueryClient;
-  postId: number;
+  postId?: number;
+  userId?: string;
   session: any;
   add: boolean;
-}) {
+}
+
+export function updateHeartsOnCache({ queryClient, postId, session, add }: MutationProps) {
   const queryCache = queryClient.getQueryCache();
   const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
 
@@ -50,6 +49,55 @@ export function updateHeartsOnCache({
             _count: {
               ...value._count,
               Hearts: value._count.Hearts + (add ? 1 : -1),
+            },
+          };
+          queryClient.setQueryData(queryKey, shallow);
+        }
+      }
+    }
+  });
+}
+
+export function updateFollowersOnCache({ queryClient, userId, session, add }: MutationProps) {
+  const queryCache = queryClient.getQueryCache();
+  const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
+
+  queryKeys.forEach((queryKey) => {
+    if (queryKey[0] === 'users') {
+      // followRecommends 업데이트
+      if (queryKey[1] === 'followRecommends') {
+        const value: User[] | undefined = queryClient.getQueryData(queryKey);
+        if (value) {
+          const index = value.findIndex((v) => v.id === userId);
+          if (index > -1) {
+            const shallow = [...value];
+            shallow[index] = {
+              ...shallow[index],
+              Followers: add
+                ? [{ id: session?.user?.email as string }]
+                : shallow[index].Followers.filter((v) => v.id !== session?.user?.email),
+              _count: {
+                ...shallow[index]._count,
+                Followers: shallow[index]._count?.Followers + (add ? 1 : -1),
+              },
+            };
+            queryClient.setQueryData(queryKey, shallow);
+          }
+        }
+      }
+
+      // 개별 유저 업데이트
+      if (queryKey[1] === userId) {
+        const value: User | undefined = queryClient.getQueryData(queryKey);
+        if (value) {
+          const shallow = {
+            ...value,
+            Followers: add
+              ? [{ id: session?.user?.email as string }]
+              : value.Followers.filter((v) => v.id !== session?.user?.email),
+            _count: {
+              ...value._count,
+              Followers: value._count?.Followers + (add ? 1 : -1),
             },
           };
           queryClient.setQueryData(queryKey, shallow);
