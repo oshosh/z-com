@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ReactNode } from 'react';
+import AuthSession from './_component/AuthSession';
 import { MSWProvider } from './_component/MSWComponent';
 import './globals.css';
-import AuthSession from './_component/AuthSession';
-import { ReactNode } from 'react';
 
 if (
   process.env.NEXT_RUNTIME === 'nodejs' &&
