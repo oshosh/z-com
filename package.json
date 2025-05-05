@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "cross-env NODE_ENV=production next build",
     "start": "next start -p 80",
     "lint": "next lint",
     "mock": "npx tsx watch ./src/mocks/http.ts"
