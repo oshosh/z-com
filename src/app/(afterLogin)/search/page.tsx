@@ -7,11 +7,13 @@ import style from './search.module.css';
 
 type Props = {
   searchParams: Promise<{ q: string; f?: string; pf?: string }>;
-  parent: ResolvingMetadata;
 };
 
 // 부모 페이지의 메타데이터를 상속받아 사용 - parent (ex) '/' 페이지의 메타데이터를 상속받아 사용
-export async function generateMetadata({ searchParams, parent }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const { q } = await searchParams;
   console.log('parent', parent);
 
