@@ -1,11 +1,13 @@
 'use client';
 import style from '@/app/(afterLogin)/_component/post.module.css';
 import { Post } from '@/model/Post';
+import { useModalStore } from '@/store/modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import cx from 'classnames';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { MouseEventHandler } from 'react';
-import { updateHeartsOnCache } from '../_lib/optimisticAction';
+import { updateHeartsOnCache, updateRepostsOnCache } from '../_lib/optimisticAction';
 
 type ActionButtonsProps = {
   white?: boolean;
@@ -13,12 +15,14 @@ type ActionButtonsProps = {
 };
 export default function ActionButtons({ white, post }: ActionButtonsProps) {
   const { data: session } = useSession();
-  const commented = !!post.Comments.find((comment) => comment.userId === session?.user.uid);
+  const router = useRouter();
   const reposted = !!post.Reposts.find((repost) => repost.userId === session?.user.uid);
   const liked = !!post.Hearts.find((heart) => heart.userId === session?.user.uid);
 
   const { postId } = post;
   const queryClient = useQueryClient();
+
+  const modalStore = useModalStore();
 
   const heart = useMutation({
     mutationFn: () => {
@@ -56,14 +60,49 @@ export default function ActionButtons({ white, post }: ActionButtonsProps) {
     onSettled() {},
   });
 
+  const repost = useMutation({
+    mutationFn: () => {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post.postId}/reposts`, {
+        method: 'post',
+        credentials: 'include',
+      });
+    },
+    async onSuccess(response) {
+      const data = await response.json();
+      updateRepostsOnCache({ queryClient, postId, session, add: true, data });
+    },
+  });
+
+  const deleteRepost = useMutation({
+    mutationFn: () => {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post.postId}/reposts`, {
+        method: 'delete',
+        credentials: 'include',
+      });
+    },
+    onSuccess() {
+      updateRepostsOnCache({ queryClient, postId, session, add: false });
+    },
+  });
+
   const onClickComment: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
+
+    modalStore.setMode('comment');
+    modalStore.setData(post);
+    router.push('/compose/tweet');
   };
 
   const onClickRePost: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
+
+    if (reposted) {
+      deleteRepost.mutate();
+    } else {
+      repost.mutate();
+    }
   };
 
   const onClickHeart: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -78,9 +117,7 @@ export default function ActionButtons({ white, post }: ActionButtonsProps) {
 
   return (
     <div className={style.actionButtons}>
-      <div
-        className={cx(style.commentButton, { [style.commented]: commented }, white && style.white)}
-      >
+      <div className={cx(style.commentButton, white && style.white)}>
         <button onClick={onClickComment}>
           <svg width={24} viewBox='0 0 24 24' aria-hidden='true'>
             <g>

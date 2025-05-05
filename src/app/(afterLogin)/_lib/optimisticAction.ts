@@ -106,3 +106,73 @@ export function updateFollowersOnCache({ queryClient, userId, session, add }: Mu
     }
   });
 }
+
+export function updateRepostsOnCache({
+  queryClient,
+  postId,
+  session,
+  add,
+  data = null,
+}: MutationProps & { data?: any }) {
+  const queryCache = queryClient.getQueryCache();
+  const queryKeys = queryCache.getAll().map((cache) => cache.queryKey);
+
+  queryKeys.forEach((queryKey) => {
+    if (queryKey[0] === 'posts') {
+      const value: Post | InfiniteData<Post[]> | undefined = queryClient.getQueryData(queryKey);
+      if (value && 'pages' in value) {
+        const obj = value.pages.flat().find((v) => v.postId === postId);
+        const repost = add
+          ? null
+          : value.pages
+              .flat()
+              .find((v) => v.Original?.postId === postId && v.User.id === session?.user?.email);
+
+        if (obj) {
+          const pageIndex = value.pages.findIndex((page) => page.includes(obj));
+          const index = value.pages[pageIndex].findIndex((v) => v.postId === postId);
+          const shallow = { ...value };
+          value.pages = { ...value.pages };
+          value.pages[pageIndex] = [...value.pages[pageIndex]];
+
+          shallow.pages[pageIndex][index] = {
+            ...shallow.pages[pageIndex][index],
+            Reposts: add
+              ? [{ userId: session?.user?.email as string }]
+              : shallow.pages[pageIndex][index].Reposts.filter(
+                  (v) => v.userId !== session?.user?.email
+                ),
+            _count: {
+              ...shallow.pages[pageIndex][index]._count,
+              Reposts: shallow.pages[pageIndex][index]._count.Reposts + (add ? 1 : -1),
+            },
+          };
+
+          if (add && data) {
+            shallow.pages[0].unshift(data);
+          } else if (!add) {
+            shallow.pages = shallow.pages.map((page) => {
+              return page.filter((v) => v.postId !== repost?.postId);
+            });
+          }
+
+          queryClient.setQueryData(queryKey, shallow);
+        }
+      } else if (value) {
+        if (value.postId === postId) {
+          const shallow = {
+            ...value,
+            Reposts: add
+              ? [{ userId: session?.user?.email as string }]
+              : value.Reposts.filter((v) => v.userId !== session?.user?.email),
+            _count: {
+              ...value._count,
+              Reposts: value._count.Reposts + (add ? 1 : -1),
+            },
+          };
+          queryClient.setQueryData(queryKey, shallow);
+        }
+      }
+    }
+  });
+}
